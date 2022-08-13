@@ -1,0 +1,35 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog {% block extra_title %}{% endblock %}</title>
+    {% tailwind_css %}
+</head>
+<body>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
+<!-- {% load static tailwind_tags %} -->
+<!-- {% load tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    <title>Django Tailwind</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		{% tailwind_css %}
+	</head>
+
+	<body class="bg-gray-50 font-serif leading-normal tracking-normal">
+		<div class="">
+			<section class="flex items-center justify-center h-screen">
+				<h1 class="text-5xl text-white bg-black">Django + Tailwind = ❤️</h1>
+			</section>
+		</div>
+	</body>
+</html> -->
