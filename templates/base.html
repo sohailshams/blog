@@ -9,6 +9,11 @@
     {% tailwind_css %}
 </head>
 <body>
+	<header>
+		<nav class="border-2 p-3 mb-5">
+			<a class="text-cyan-800 text-2xl" href="{% url 'home' %}">Home</a>
+		</nav>
+	</header>
     {% block content %}
     {% endblock %}
 </body>
