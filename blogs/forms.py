@@ -35,9 +35,7 @@ class PostModelForm(forms.ModelForm):
         # The call to super().clean() ensures that any validation logic in parent class is maintained i.e parent class = forms.ModelForm
         cleaned_data = super().clean() 
         data = self.cleaned_data.get('title')
-        print(data)
         if len(data) < 3:
-            print(len(data))
             raise forms.ValidationError('This title is too short.')
 
         return data

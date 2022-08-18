@@ -908,6 +908,10 @@ select {
   max-width: 50%;
 }
 
+.flex-none {
+  flex: none;
+}
+
 .flex-grow {
   flex-grow: 1;
 }
@@ -1007,6 +1011,11 @@ select {
 .py-5 {
   padding-top: 1.25rem;
   padding-bottom: 1.25rem;
+}
+
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
 }
 
 .pt-2 {
