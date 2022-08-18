@@ -119,3 +119,33 @@ def blog_edit_view(request, post_pk):
     }
 
     return render(request, template, context)
+
+
+def blog_delete_view(request, post_pk):
+    """ Aview to delete blog post from DB """
+    # Check if user is the owner of blog post
+    post_users = Post.objects.filter(auther=request.user)
+    if not post_users.count():
+        messages.error(
+            request, 'Sorry, you aren\'t associated with any blog post. Please contact the admin to resolve this.'
+        )
+        return redirect(reverse('home'))
+    post_user = post_users[0]
+
+    # Check if user is blog owner or return error
+    if post_user.role != 'owner':
+        messages.error(request, 'Only blog owner can access it.')
+        return redirect(reverse('home'))
+
+     # Get blog post or return error 
+    try:
+        post = Post.objects.get(auther=request.user, id=post_pk)
+    except:
+        messages.error(request, 'Blog post can not be found!')
+        return redirect(reverse('home'))
+
+    # Delete blog post
+    post.delete()
+    messages.success(request, 'Blog post deleted successfully!')
+    return redirect(reverse('home'))
+    

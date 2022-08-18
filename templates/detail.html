@@ -10,7 +10,8 @@
 </div>
 
 </div>
-<div class="my-5 mx-auto w-96">
+<div class="flex justify-center py-5">
 <a class="text-xl text-cyan-800 border-2 px-5 hover:text-red-800 py-3 px-5 shadow-lg" href="{% url 'blog_edit' post_id %}">+ Edit Blog Post</a>
+<a class="text-xl text-cyan-800 border-2 px-5 hover:text-red-800 py-3 px-5 shadow-lg" href="{% url 'blog_delete' post_id %}">- Delete Blog Post</a>
 </div>
 {% endblock %}
