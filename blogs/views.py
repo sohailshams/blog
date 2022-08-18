@@ -1,6 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
+from django.contrib import messages
 
 from .models import Post
+
+from .forms import PostModelForm
 
 def blog_list_view(request):
     """ A view to render all blog posts """
@@ -34,5 +37,37 @@ def blog_detail_view(request, post_pk):
         'post_auther': post_auther,
         'post_body': post_body
         }
+
+    return render(request, template_name, template_dict)
+
+def blog_add_view(request):
+    """ A view to add blog post """
+    if request.method == 'POST':
+
+        # Instantiate a new instance of blog post form
+        form = PostModelForm(request.POST or None)
+        if form.is_valid():
+            obj = form.save(commit=False)
+
+            # Attach user to the blog post
+            obj.auther = request.user
+            obj.save()
+
+            # Add success message
+            messages.success(request, 'Blog added successfully!')
+            return redirect(reverse('home'))
+
+        else:
+            messages.error(request, 'Failed to add blog post. \
+                                    Please make sure, the form is valid.')
+    else:
+        # Empty form instantiation
+        form = PostModelForm()
+
+    template_name = 'form.html'
+
+    template_dict = {
+        'form': form
+    }
 
     return render(request, template_name, template_dict)

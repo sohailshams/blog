@@ -10,10 +10,18 @@
 </head>
 <body>
 	<header>
-		<nav class="border-2 p-3 mb-5">
+		<nav class="border-2 p-3 mb-5 shadow-lg">
 			<a class="text-cyan-800 text-2xl" href="{% url 'home' %}">Home</a>
 		</nav>
 	</header>
+	<!--If statement to render messages-->
+	<div class="my-0 mx-auto w-96 px-3">
+		{% if messages %}
+			{% for message in messages %}
+				<div class="text-orange-500"> {{ message }}</div>
+			{% endfor %}
+		{% endif %}
+	</div>
     {% block content %}
     {% endblock %}
 </body>
