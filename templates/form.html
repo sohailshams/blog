@@ -2,7 +2,7 @@
 {% block extra_title %}post{% endblock %}
 {% block content %}
 <div class="my-0 mx-auto w-96">
-    <h2 class="text-2xl text-red-800 my-5 shadow-lg">Add a Blog</h2>
+    <h2 class="text-2xl text-red-800 my-5 h-15">Add a Blog</h2>
 </div>
 <form class="my-0 mx-auto w-96" method="POST" action=".">{% csrf_token %}
     {{form.as_p}}

@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
 {% block extra_title %}post{% endblock %}
 {% block content %}
-<div class="flex justify-center">
-   <div class="border-2 border-t-0 p-3 w-96 shadow-lg">
-    <h2 class="text-2xl text-red-800 my-5">{{post_title}}</h2>
-    <p>{{post_body}}</p>
-    <p>{{post_auther}}</p>
-    
+<div class="h-20 my-5 mx-auto w-96 ">
+    <h1 class="text-2xl text-red-800 my-5 mx-auto w-48  h-20">Blog Post {{post_title}}</h1>
 </div>
-
+<div class="flex justify-center">
+   <div class="border-2 border-t-0 p-3 w-10/12 shadow-lg">
+        <h2 class="text-2xl text-red-800 my-5">{{post_title}}</h2>
+        <p>{{post_body}}</p>
+        <p>{{post_auther}}</p>
+    </div>
 </div>
 <div class="flex justify-center py-5">
-<a class="text-xl text-cyan-800 border-2 px-5 hover:text-red-800 py-3 px-5 shadow-lg" href="{% url 'blog_edit' post_id %}">+ Edit Blog Post</a>
-<a class="text-xl text-cyan-800 border-2 px-5 hover:text-red-800 py-3 px-5 shadow-lg" href="{% url 'blog_delete' post_id %}">- Delete Blog Post</a>
+    <a class="text-xl text-cyan-800 border-2 px-5 hover:text-red-800 py-3 px-5 shadow-lg" href="{% url 'blog_edit' post_id %}">+ Edit Blog Post</a>
+    <a class="text-xl text-cyan-800 border-2 px-5 hover:text-red-800 py-3 px-5 shadow-lg block" href="{% url 'blog_delete' post_id %}">- Delete Blog Post</a>
 </div>
 {% endblock %}
