@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block extra_title %}post{% endblock %}
+{% block content %}
+<div class="my-0 mx-auto w-96">
+    <h2 class="text-2xl text-red-800 my-5 h-15">Log In</h2>
+</div>
+<form class="my-0 mx-auto w-96" method="POST" action=".">{% csrf_token %}
+    {{form.as_p}}
+    <button class="text-2xl text-cyan-800 border-2 px-5 hover:text-red-800 shadow-lg" type="submit">Log In</button>
+</form>
+{% endblock %}

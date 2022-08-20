@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'tailwind',
     'theme',
     'django_browser_reload',
+    'heroicons',
 ]
 
 MIDDLEWARE = [
@@ -133,3 +134,9 @@ TAILWIND_APP_NAME = 'theme'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+# Redirect the user to home page on successfull login
+LOGIN_REDIRECT_URL = 'home'
+
+# Redirect the user to login page on successfull logout
+LOGOUT_REDIRECT_URL = '/accounts/login/'
