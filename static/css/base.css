@@ -1,0 +1,33 @@
+/* Removed the labels and styled placeholders */
+.login-form > p > label[for="id_username"]
+{
+    display:none;
+    position: relative;
+}
+
+.login-form > p > label[for="id_password"]
+{
+    display:none;
+}
+
+.login-form > p > input::placeholder {
+    color: #6b7280;
+    font-size: 1.2em;
+  }
+
+  .login-form > p
+  {
+      margin-top: 10px;
+  }
+
+.login-button {
+    margin-top: 10px;
+}
+
+.login {
+    position: absolute;
+    padding: 50px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
