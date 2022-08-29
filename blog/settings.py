@@ -42,8 +42,8 @@ INSTALLED_APPS = [
     'theme',
     'django_browser_reload',
     'heroicons',
-    'widget_tweaks',
-]
+    'accounts',
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -141,4 +141,4 @@ INTERNAL_IPS = [
 LOGIN_REDIRECT_URL = 'home'
 
 # Redirect the user to login page on successfull logout
-LOGOUT_REDIRECT_URL = '/accounts/login/'
+LOGOUT_REDIRECT_URL = 'home'
