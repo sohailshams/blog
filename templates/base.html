@@ -14,18 +14,18 @@
 	<link rel="stylesheet" href="{% static 'css/base.css' %}" />
 </head>
 <body>
-	<header>
-		<nav class="border-2 p-3 mb-5 shadow-lg">
+	<header class="sticky top-0 nav">
+		<nav class="border-2 p-3 mb-5 shadow-lg bg-black">
 			<div class="flex justify-between">
-				<a class="text-cyan-800 text-2xl" href="{% url 'home' %}">Home</a>
+				<a class="text-white text-2xl" href="{% url 'home' %}">Home</a>
 				{% if not user.is_authenticated %}
-					<a class="text-cyan-800 text-2xl" href="{% url 'login' %}">{% heroicon_outline "login" %}</a>
+					<a class="text-white text-2xl" href="{% url 'login' %}">{% heroicon_outline "login" %}</a>
 				{% else %}
-					<a class="text-cyan-800 text-2xl" href="{% url 'logout' %}">{% heroicon_outline "logout" %}</a>
+					<a class="text-white text-2xl" href="{% url 'logout' %}">{% heroicon_outline "logout" %}</a>
 				{% endif %}
 		</nav>
 	</header>
-	<div class="h-screen">
+	<div class="h-screen relative">
 	<!--If statement to render messages-->
 	<div class="my-0 mx-auto w-96 px-3">
 		{% if messages %}
@@ -37,24 +37,24 @@
     {% block content %}
     {% endblock %}
 </div>
-	<footer class="shadow-lg border-2">
+	<footer class="shadow-lg border-2 bg-black">
 		<div class="grid grid-cols-3 text-center h-20 items-center">
 			<a
-			  class="font-bold text-cyan-800"
+			  class="font-bold text-white"
 			  target="_blank"
 			  href="https://www.facebook.com/sohail.252/"
 			>
 			  Facebook
 			</a>
 			<a
-			  class="font-bold text-cyan-800"
+			  class="font-bold text-white"
 			  target="_blank"
 			  href="https://www.linkedin.com/in/muhammad-sohail-shams-56995126/"
 			>
 			  Linkedin
 			</a>
 			<a
-			  class="font-bold text-cyan-800"
+			  class="font-bold text-white"
 			  target="_blank"
 			  href="https://github.com/sohailshams"
 			>

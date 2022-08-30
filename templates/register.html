@@ -2,13 +2,13 @@
 {% block extra_title %}post{% endblock %}
 
 {% block content %}
-<div class="login border-2 border-t-0 shadow-lg">
+<div class="login border-2 shadow-lg">
     <h2 class="text-2xl text-red-800 my-5 h-15">Register</h2>
-<form class="login-form" method="POST" action=".">{% csrf_token %}
-    {{form.as_p}}
-    <button class="text-2xl text-cyan-800 border-2 px-5 py-1 hover:text-red-800 shadow-lg login-button" type="submit">Register</button>
-</form>
-<p class="mt-3">Please <a class="text-cyan-800" href="{% url 'login' %}">login</a> instead if you already have an account!</p>
+    <form class="login-form" method="POST" action=".">{% csrf_token %}
+        {{form.as_p}}
+        <button class="text-2xl text-cyan-800 border-2 px-5 py-1 hover:text-red-800 shadow-lg login-button" type="submit">Register</button>
+    </form>
+    <p class="mt-3">Please <a class="text-cyan-800" href="{% url 'login' %}">login</a> instead if you already have an account!</p>
 </div>
 <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
 <script>
