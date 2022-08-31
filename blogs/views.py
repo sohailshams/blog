@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from .models import Post
 
@@ -42,6 +43,7 @@ def blog_detail_view(request, post_pk):
 
     return render(request, template_name, template_dict)
 
+@login_required
 def blog_add_view(request):
     """ A view to add blog post """
     if request.method == 'POST':
@@ -74,13 +76,15 @@ def blog_add_view(request):
 
     return render(request, template_name, template_dict)
 
+@login_required
 def blog_edit_view(request, post_pk):
     """ A view to edit blog post if user is the owner of this blog post """
     # Check if user is the owner of blog post
     post_users = Post.objects.filter(auther=request.user)
+    print(post_users)
     if not post_users.count():
         messages.error(
-            request, 'Sorry, you aren\'t associated with any blog post. Please contact the admin to resolve this.'
+            request, 'Sorry, you aren\'t authorized to edit this blog post.'
         )
         return redirect(reverse('home'))
     post_user = post_users[0]
@@ -120,14 +124,14 @@ def blog_edit_view(request, post_pk):
 
     return render(request, template, context)
 
-
+@login_required
 def blog_delete_view(request, post_pk):
     """ Aview to delete blog post from DB """
     # Check if user is the owner of blog post
     post_users = Post.objects.filter(auther=request.user)
     if not post_users.count():
         messages.error(
-            request, 'Sorry, you aren\'t associated with any blog post. Please contact the admin to resolve this.'
+            request, 'Sorry, you aren\'t authorized to delete this blog post.'
         )
         return redirect(reverse('home'))
     post_user = post_users[0]
