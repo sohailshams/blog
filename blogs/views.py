@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from .models import Post
+from .models import BlogPost
 
 from .forms import PostModelForm
 
@@ -10,38 +10,35 @@ def blog_list_view(request):
     """ A view to render all blog posts """
 
     # Get all blog posts and order them by updated date
-    posts = Post.objects.all().order_by('-updated')
-   
+    blog_posts = BlogPost.objects.all().order_by('-updated')
     template_name = 'home.html'
 
-    template_dict = {
-        'post_list': posts,
+    context = {
+        'post_list': blog_posts,
     }
 
-    return render(request, template_name, template_dict)
+    return render(request, template_name, context)
 
-def blog_detail_view(request, post_pk):
+def blog_detail_view(request, **kwargs):
     """ A view to render blog post detail """
+    # if request.method == 'GET':
+    user = request.user
+    uuid = kwargs.get('post_uuid', None)
 
-    # Get a blog post by its id 
-    post = Post.objects.filter(id=post_pk)
-   
-    post_title = post[0].title
-    post_auther = post[0].auther
-    post_body = post[0].body
-    post_id = post[0].id
-
-
+    # Get a blog post by its uuid or redirect to the home page 
+    try:
+        blog_post = BlogPost.objects.get(post_uuid=uuid)
+    except:        
+        messages.error(request, 'Sorry, this post does not exist.')
+        return redirect(reverse('home'))
+    
     template_name = 'detail.html'
 
-    template_dict = {
-        'post_title': post_title,
-        'post_auther': post_auther,
-        'post_body': post_body,
-        'post_id': post_id
+    context = {
+        'blog_post': blog_post
         }
 
-    return render(request, template_name, template_dict)
+    return render(request, template_name, context)
 
 @login_required
 def blog_add_view(request):
@@ -51,11 +48,11 @@ def blog_add_view(request):
         # Instantiate a new instance of blog post form
         form = PostModelForm(request.POST or None)
         if form.is_valid():
-            obj = form.save(commit=False)
+            blog_obj = form.save(commit=False)
 
             # Attach user to the blog post
-            obj.auther = request.user
-            obj.save()
+            blog_obj.auther = request.user
+            blog_obj.save()
 
             # Add success message
             messages.success(request, 'Blog added successfully!')
@@ -70,86 +67,67 @@ def blog_add_view(request):
 
     template_name = 'form.html'
 
-    template_dict = {
+    context = {
         'form': form
     }
 
-    return render(request, template_name, template_dict)
+    return render(request, template_name, context)
 
 @login_required
-def blog_edit_view(request, post_pk):
+def blog_edit_view(request,  **kwargs):
     """ A view to edit blog post if user is the owner of this blog post """
-    # Check if user is the owner of blog post
-    post_users = Post.objects.filter(auther=request.user)
-    print(post_users)
-    if not post_users.count():
-        messages.error(
-            request, 'Sorry, you aren\'t authorized to edit this blog post.'
-        )
-        return redirect(reverse('home'))
-    post_user = post_users[0]
+    user = request.user
+    uuid = kwargs.get('post_uuid', None)
 
-    # Check if user is blog owner or return error
-    if post_user.role != 'owner':
+    # Get a blog post by passing user and post_uuid or redirect to the home page
+    try:
+        blog_post = BlogPost.objects.get(
+            post_uuid=uuid,
+            auther=user)
+    except:        
         messages.error(request, 'Only blog owner can access it.')
         return redirect(reverse('home'))
 
-    # Get blog post or return error 
-    try:
-        post = Post.objects.get(auther=request.user, id=post_pk)
-    except:
-        messages.error(request, 'Blog post can not be found!')
-        return redirect(reverse('home'))
-
     if request.method == 'POST':
-        # Instantiated a form using request.post and post_pk
-        form = PostModelForm(request.POST, instance=post)
+        # Instantiated a form using request.post
+        form = PostModelForm(request.POST, instance=blog_post)
         if form.is_valid():
             form.save()
             messages.success(request, 'Blog post updated successfully!')
-            return redirect(reverse('blog_detail', args=[post.id]))
+            return redirect(reverse('blog_detail', args=[blog_post.post_uuid]))
         else:
             messages.error(request, 'Failed to update blog post. \
                             Please ensure the form is valid.')
     else:
         # Instantiating blog post form using the blog post
-        form = PostModelForm(instance=post)
-        messages.info(request, f'You are editing {post.title}')
+        form = PostModelForm(instance=blog_post)
+        messages.info(request, f'You are editing {blog_post.title}')
 
     template = 'edit.html'
     context = {
         'form': form,
-        'post': post,
+        'blog_post': blog_post,
     }
 
     return render(request, template, context)
 
 @login_required
-def blog_delete_view(request, post_pk):
+def blog_delete_view(request, **kwargs):
     """ Aview to delete blog post from DB """
-    # Check if user is the owner of blog post
-    post_users = Post.objects.filter(auther=request.user)
-    if not post_users.count():
-        messages.error(
-            request, 'Sorry, you aren\'t authorized to delete this blog post.'
-        )
-        return redirect(reverse('home'))
-    post_user = post_users[0]
+    user = request.user
+    uuid = kwargs.get('post_uuid', None)
 
-    # Check if user is blog owner or return error
-    if post_user.role != 'owner':
-        messages.error(request, 'Only blog owner can access it.')
-        return redirect(reverse('home'))
-
-     # Get blog post or return error 
+    # Get a blog post by passing user and post_uuid or redirect to the home page
     try:
-        post = Post.objects.get(auther=request.user, id=post_pk)
-    except:
-        messages.error(request, 'Blog post can not be found!')
-        return redirect(reverse('home'))
+        blog_post = BlogPost.objects.get(
+            post_uuid=uuid,
+            auther=user)
+    except:        
+        messages.error(request, 'Sorry, you aren\'t authorized to delete this blog post.')
+        return redirect(reverse('home')) 
 
     # Delete blog post
-    post.delete()
+    blog_post.delete()
     messages.success(request, 'Blog post deleted successfully!')
     return redirect(reverse('home'))
     

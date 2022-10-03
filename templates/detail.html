@@ -1,18 +1,19 @@
 {% extends 'base.html' %}
 {% block extra_title %}post{% endblock %}
 {% block content %}
-<div class="h-20 my-5 mx-auto w-96 ">
-    <h1 class="text-2xl text-red-800 my-5 mx-auto w-48  h-20">Blog Post {{post_title}}</h1>
-</div>
+<div class="h-20 my-5"></div>
 <div class="flex justify-center">
-   <div class="border-2 border-t-0 p-3 w-10/12 shadow-lg">
-        <h2 class="text-2xl text-red-800 my-5">{{post_title}}</h2>
-        <p>{{post_body}}</p>
-        <p>{{post_auther}}</p>
+   <div class="border-2 border-t-0 p-3 w-10/12 shadow-lg mt-5">
+        <h2 class="text-2xl text-red-800 my-5">{{blog_post.title}}</h2>
+        <p>{{blog_post.body}}</p>
+        <p>{{blog_post.auther}}</p>
     </div>
 </div>
+{% if request.user == blog_post.auther %}
 <div class="flex justify-center py-5">
-    <a class="text-xl text-cyan-800 border-2 px-5 hover:text-red-800 py-3 px-5 shadow-lg" href="{% url 'blog_edit' post_id %}">+ Edit Blog Post</a>
-    <a class="text-xl text-cyan-800 border-2 px-5 hover:text-red-800 py-3 px-5 shadow-lg block" href="{% url 'blog_delete' post_id %}">- Delete Blog Post</a>
+    <a class="text-xl text-cyan-800 border-2 px-5 hover:text-red-800 py-3 px-5 shadow-lg" href="{% url 'blog_edit' blog_post.post_uuid %}">+ Edit Blog Post</a>
+    <a class="text-xl text-cyan-800 border-2 px-5 hover:text-red-800 py-3 px-5 shadow-lg block" href="{% url 'blog_delete' blog_post.post_uuid %}">- Delete Blog Post</a>
 </div>
+{% endif %}
+
 {% endblock %}

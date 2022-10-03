@@ -16,13 +16,14 @@
 <body>
 	<header class="sticky top-0 nav">
 		<nav class="border-2 p-3 mb-5 shadow-lg bg-black">
-			<div class="flex justify-between">
+			<div class="flex justify-between mt-3">
 				<a class="text-white text-2xl" href="{% url 'home' %}">Home</a>
 				{% if not user.is_authenticated %}
-					<a class="text-white text-2xl" href="{% url 'login' %}">{% heroicon_outline "login" %}</a>
+					<a class="text-white text-2xl" href="{% url 'login' %}">{% heroicon_outline "login" %}<span class="text-sm">Log In</span></a>
 				{% else %}
-					<a class="text-white text-2xl" href="{% url 'logout' %}">{% heroicon_outline "logout" %}</a>
+					<a class="text-white text-2xl" href="{% url 'logout' %}">{% heroicon_outline "logout" %}<span class="text-sm">Logout</span></a>
 				{% endif %}
+			</div>
 		</nav>
 	</header>
 	<div class="h-screen relative">

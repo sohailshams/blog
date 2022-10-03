@@ -8,7 +8,7 @@ def register_view(request):
         # Instantiate a new instance of blog post form
         form = SignupModelForm(request.POST or None)
         if form.is_valid():
-            user = form.save(commit=False)
+            user_obj = form.save()
             
             # Add success message
             messages.success(request, "Registration successful." )
