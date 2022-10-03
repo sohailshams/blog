@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 {% block extra_title %}Home{% endblock %}
 {% block content %}
+
+{% if request.user.is_authenticated %}
 <div class="my-5 p-5">
     <a class="text-cyan-800 text-xl" href="{% url 'blog_add' %}">+ New Blog Post</a>
 </div>
+{% endif %}
 
 {% if post_list %}
 <div class="h-20 my-5 mx-auto w-96 ">
