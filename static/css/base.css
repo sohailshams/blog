@@ -1,4 +1,12 @@
+
+.nav {
+    z-index: 100;
+    margin-top: 0px !important;
+    padding-top: 0px !important;
+    }
+
 /* Removed the labels and styled placeholders */
+
 .login-form > p > label[for="id_username"]
 {
     display:none;
@@ -31,24 +39,52 @@
     top: 50%;
     transform: translate(-50%, -50%);
 }
+
 /* Removed the labels and styled placeholders - register page */
+
 label[for="id_email"]
 {
     display:none;
 
 }
+
 label[for="id_password1"]
 {
     display:none;
 
 }
+
 label[for="id_password2"]
 {
     display:none;
 
 }
-.nav {
-z-index: 100;
-margin-top: 0px !important;
-padding-top: 0px !important;
+
+/* Removed the labels and styled placeholders - password change page */
+
+label[for="id_old_password"]
+{
+    display:none;
+
+}
+
+label[for="id_new_password1"]
+{
+    display:none;
+
+}
+
+label[for="id_new_password2"]
+{
+    display:none;
+
+}
+
+.success-width {
+    width: 350 px !important;
+    position: absolute;
+    padding: 15px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
