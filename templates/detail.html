@@ -7,7 +7,16 @@
         <h2 class="text-2xl text-red-800 my-5">{{blog_post.title}}</h2>
         <p>{{blog_post.body}}</p>
         <p>{{blog_post.auther}}</p>
+        <div>
+            <h4 class="text-xl text-red-800 my-5">Comments</h4>
+            {% for comment in  comment_list %}
+            <ul>
+                <li class="py-1">{{comment.comment_body}}</li>
+            </ul>
+            {% endfor %}
+        </div>
     </div>
+   
 </div>
 {% if request.user == blog_post.auther %}
 <div class="flex justify-center py-5">

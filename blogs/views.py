@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from .models import BlogPost
+from .models import BlogPost, BlogComment
 
 from .forms import PostModelForm
 
@@ -31,11 +31,18 @@ def blog_detail_view(request, **kwargs):
     except:        
         messages.error(request, 'Sorry, this post does not exist.')
         return redirect(reverse('home'))
-    
+
+    # Get all blog comments and order them by updated date
+    blog_comments = BlogComment.objects.filter(
+        comment_blog__post_uuid=uuid,
+        comment_auther=user
+    ).order_by('-updated')
+     
     template_name = 'detail.html'
 
     context = {
-        'blog_post': blog_post
+        'blog_post': blog_post,
+        'comment_list': blog_comments
         }
 
     return render(request, template_name, context)
