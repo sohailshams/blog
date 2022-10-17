@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import BlogPost, BlogComment
 
-from .forms import PostModelForm
+from .forms import PostModelForm, CommentModelForm
 
 def blog_list_view(request):
     """ A view to render all blog posts """
@@ -21,28 +21,72 @@ def blog_list_view(request):
 
 def blog_detail_view(request, **kwargs):
     """ A view to render blog post detail """
-    # if request.method == 'GET':
-    user = request.user
+   
     uuid = kwargs.get('post_uuid', None)
 
-    # Get a blog post by its uuid or redirect to the home page 
-    try:
-        blog_post = BlogPost.objects.get(post_uuid=uuid)
-    except:        
-        messages.error(request, 'Sorry, this post does not exist.')
-        return redirect(reverse('home'))
+    if request.method == 'GET': 
+        # Get a blog post by its uuid or redirect to the home page 
+        try:
+            blog_post = BlogPost.objects.get(post_uuid=uuid)
+        except:        
+            messages.error(request, 'Sorry, this post does not exist.')
+            return redirect(reverse('home'))
 
-    # Get all blog comments and order them by updated date
-    blog_comments = BlogComment.objects.filter(
-        comment_blog__post_uuid=uuid,
-        comment_auther=user
-    ).order_by('-updated')
+        # Get all blog comments and order them by updated date
+        blog_comments = BlogComment.objects.filter(
+            comment_blog=blog_post,
+            # comment_auther=user
+        ).order_by('-updated')
+   
+
+    if request.method == 'POST':
+        
+        user = request.user
+        
+        # Get a blog post by its uuid or redirect to the home page 
+        try:
+            blog_post = BlogPost.objects.get(post_uuid=uuid)
+        except:        
+            messages.error(request, 'Sorry, this post does not exist.')
+
+        # If condition to ensure only logged in user can add comments.
+        if user.is_authenticated:
+            # Instantiate a new instance of blog post form
+            form = CommentModelForm(request.POST or None)
+            if form.is_valid():
+                comment_obj = form.save(commit=False)
+
+                # Attach user & blog post to comment
+                comment_obj.comment_auther = request.user
+                comment_obj.comment_blog = blog_post
+
+                comment_obj.save()
+
+                # Add success message
+                messages.success(request, 'Comment added successfully!')
+
+                
+                return redirect(reverse('blog_detail',  args=[blog_post.post_uuid]))
+
+            else:
+                messages.error(request, 'Failed to add comment. \
+                                        Please make sure, the form is valid.')
+        
+        else:
+            # Add an error message
+            messages.error(request, 'Please login to add comment.')
+            return redirect(reverse('home'))
+    else:
+        # Empty form instantiation
+        form = CommentModelForm()
+    
      
     template_name = 'detail.html'
 
     context = {
         'blog_post': blog_post,
-        'comment_list': blog_comments
+        'comment_list': blog_comments,
+        'form': form
         }
 
     return render(request, template_name, context)

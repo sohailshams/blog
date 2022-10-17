@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load heroicons %}
 {% block extra_title %}post{% endblock %}
 {% block content %}
 <div class="h-20 my-5"></div>
@@ -8,10 +9,17 @@
         <p>{{blog_post.body}}</p>
         <p>{{blog_post.auther}}</p>
         <div>
-            <h4 class="text-xl text-red-800 my-5">Comments</h4>
+          {% if request.user.is_authenticated %}
+            <form class="login-form flex justify-center	items-center" method="POST" action=".">{% csrf_token %}
+                {{form.as_p}} 
+                <button class="text-white text-cyan-800 login-button pl-3 invisible comment-button" type="submit">{% heroicon_outline "chevron-right" %}</button>
+            </form>
+            {% endif %}
             {% for comment in  comment_list %}
             <ul>
-                <li class="py-1">{{comment.comment_body}}</li>
+              <li class="py-1 bg-slate-100 font-bold">{{comment.comment_auther}}</li>
+                <li class="py-1 bg-slate-100">{{comment.comment_body}}</li>
+                <li class="my-3"></li>
             </ul>
             {% endfor %}
         </div>
@@ -24,5 +32,18 @@
     <a class="text-xl text-cyan-800 border-2 px-5 hover:text-red-800 py-3 px-5 shadow-lg block" href="{% url 'blog_delete' blog_post.post_uuid %}">- Delete Blog Post</a>
 </div>
 {% endif %}
-
+<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
+<script>
+$(document).ready(() => {
+    $("input, #id_comment_body ").on("keyup", () => {
+        if ($('#id_comment_body').val().length) {
+            $('.comment-button').removeClass('invisible');
+            $('.comment-button').addClass('visible');
+        } else {
+            $('.comment-button').removeClass('visible');
+            $('.comment-button').addClass('invisible');
+        }
+    });
+});
+</script>
 {% endblock %}

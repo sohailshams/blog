@@ -1,5 +1,5 @@
 from django import forms
-from .models import BlogPost
+from .models import BlogPost, BlogComment
 
 class PostModelForm(forms.ModelForm):
     class Meta:
@@ -41,7 +41,7 @@ class PostModelForm(forms.ModelForm):
         return data
 
     
-        # Override the default init method which allows the form to be customized
+    # Override the default init method which allows the form to be customized
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
@@ -55,4 +55,29 @@ class PostModelForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'my-5 shadow-lg'
             field.label = ""
-    
+
+
+class CommentModelForm(forms.ModelForm):
+
+    class Meta:
+        """
+        Telling django it is associated with review model
+        """
+        model = BlogComment
+        """
+        Set exclude attribute and render all fields except user
+        as it will never change
+        """
+        fields = [
+            'comment_body',
+        ]
+    # Override the default init method which allows the form to be customized
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Added placehoder to the form fields
+        self.fields['comment_body'].widget.attrs['placeholder'] = 'Please add comment here.'
+
+        # Removed the form lables
+        for field_name, field in self.fields.items():
+            field.label = ""
