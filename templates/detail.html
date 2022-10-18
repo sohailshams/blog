@@ -18,7 +18,8 @@
             {% for comment in  comment_list %}
             <ul>
               <li class="py-1 bg-slate-100 font-bold">{{comment.comment_auther}}</li>
-              <li class="py-1 bg-slate-100">{{comment.comment_body}} <br><a class="text-sm text-cyan-800" href="{% url 'blog_comment_edit' blog_post.post_uuid comment.comment_uuid %}">+ Edit Comment</a></li>
+                <li class="py-1 bg-slate-100">{{comment.comment_body}} {% if request.user == comment.comment_auther %}<br><a class="text-sm text-cyan-800" href="{% url 'blog_comment_edit' blog_post.post_uuid comment.comment_uuid %}">+ Edit Comment</a></li>
+                {% endif %}
                 <li class="my-3"></li>
             </ul>
             {% endfor %}
