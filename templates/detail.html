@@ -12,13 +12,16 @@
           {% if request.user.is_authenticated %}
             <form class="login-form flex justify-center	items-center" method="POST" action=".">{% csrf_token %}
                 {{form.as_p}} 
-                <button class="text-white text-cyan-800 login-button pl-3 invisible comment-button" type="submit">{% heroicon_outline "chevron-right" %}</button>
+                <button class="text-white text-cyan-800 login-button pl-3 invisible comment-button pb-5" type="submit">{% heroicon_outline "chevron-right" %}</button>
             </form>
             {% endif %}
             {% for comment in  comment_list %}
             <ul>
               <li class="py-1 bg-slate-100 font-bold">{{comment.comment_auther}}</li>
-                <li class="py-1 bg-slate-100">{{comment.comment_body}} {% if request.user == comment.comment_auther %}<br><a class="text-sm text-cyan-800" href="{% url 'blog_comment_edit' blog_post.post_uuid comment.comment_uuid %}">+ Edit Comment</a></li>
+                <li class="py-1 bg-slate-100">
+                  {{comment.comment_body}} {% if request.user == comment.comment_auther %}<br><a class="text-sm text-cyan-800" href="{% url 'blog_comment_edit' blog_post.post_uuid comment.comment_uuid %}">+ Edit</a>
+                  <a class="text-sm text-cyan-800" href="{% url 'blog_comment_delete' comment.comment_uuid %}">| - Delete</a>
+                </li>
                 {% endif %}
                 <li class="my-3"></li>
             </ul>

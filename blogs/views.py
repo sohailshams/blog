@@ -136,6 +136,29 @@ def blog_comment_edit_view(request,  **kwargs):
     return render(request, template, context)
 
 @login_required
+def blog_comment_delete_view(request, **kwargs):
+    """ Aview to delete blog post comment from DB """
+    user = request.user
+    uuid = kwargs.get('comment_uuid', None)
+    print('Comment uuid', uuid)
+    print('user', user)
+
+    # Get a blog post by passing user and post_uuid or redirect to the home page
+    try:
+        blog_post_comment = BlogComment.objects.get(
+            comment_uuid=uuid,
+            comment_auther=user
+            )
+    except:        
+        messages.error(request, 'Sorry, you aren\'t authorized to delete this blog post comment.')
+        return redirect(reverse('home')) 
+
+    # Delete blog post
+    blog_post_comment.delete()
+    messages.success(request, 'Blog post comment deleted successfully!')
+    return redirect(reverse('home'))
+    
+@login_required
 def blog_add_view(request):
     """ A view to add blog post """
     if request.method == 'POST':
