@@ -35,7 +35,6 @@ def blog_detail_view(request, **kwargs):
         # Get all blog comments and order them by updated date
         blog_comments = BlogComment.objects.filter(
             comment_blog=blog_post,
-            # comment_auther=user
         ).order_by('-updated')
    
 
@@ -91,6 +90,84 @@ def blog_detail_view(request, **kwargs):
 
     return render(request, template_name, context)
 
+@login_required
+def blog_comment_edit_view(request,  **kwargs):
+    """ A view to edit blog post comment if user is the owner of this blog post comment """
+    # Get user and commnet_uuid from request
+    user = request.user
+    uuid = kwargs.get('comment_uuid', None)
+
+    # Get a blog post comment or redirect to the home page with error message
+    try:
+        blog_post_comment = BlogComment.objects.get(
+            comment_uuid=uuid,
+            comment_auther=user
+            )
+    except:        
+        messages.error(request, 'Only blog post comment owner can access it.')
+        return redirect(reverse('home'))
+
+    # Get blog post comment_uuid
+    blog_post = blog_post_comment.comment_blog.post_uuid
+
+    if request.method == 'POST':
+        # Instantiated a form using request.post & blog post instance
+        form = CommentModelForm(request.POST, instance=blog_post_comment)
+        if form.is_valid():
+            form.save()
+
+            messages.success(request, 'Blog post comment updated successfully!')
+            return redirect(reverse('blog_detail', args=[blog_post]))
+        else:
+            messages.error(request, 'Failed to update blog post comment. \
+                            Please ensure the form is valid.')
+    else:
+        # Instantiating blog post form using the blog post
+        form = CommentModelForm(instance=blog_post_comment)
+        messages.info(request, f'You are editing blog post comment')
+
+    template = 'blog_comment_edit.html'
+    context = {
+        'form': form,
+        'blog_post': blog_post,
+        'comment': blog_post_comment,
+    }
+
+    return render(request, template, context)
+
+@login_required
+def blog_add_view(request):
+    """ A view to add blog post """
+    if request.method == 'POST':
+
+        # Instantiate a new instance of blog post form
+        form = PostModelForm(request.POST or None)
+        if form.is_valid():
+            blog_obj = form.save(commit=False)
+
+            # Attach user to the blog post
+            blog_obj.auther = request.user
+            blog_obj.save()
+
+            # Add success message
+            messages.success(request, 'Blog added successfully!')
+            return redirect(reverse('home'))
+
+        else:
+            messages.error(request, 'Failed to add blog post. \
+                                    Please make sure, the form is valid.')
+    else:
+        # Empty form instantiation
+        form = PostModelForm()
+
+    template_name = 'form.html'
+
+    context = {
+        'form': form
+    }
+
+    return render(request, template_name, context)
+    
 @login_required
 def blog_add_view(request):
     """ A view to add blog post """
