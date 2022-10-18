@@ -29,32 +29,33 @@
   }
 </script>
 </head>
-<body> 
-	<header class="sticky top-0 nav">
-		<nav class="border-2 p-3 mb-5 shadow-lg bg-black">
-			<div class="flex justify-between mt-3">
-				<a class="text-white text-2xl" href="{% url 'home' %}">Home</a>
-				{% if not user.is_authenticated %}
-					<a class="text-white text-2xl" href="{% url 'login' %}">{% heroicon_outline "login" %}<span class="text-sm">Log In</span></a> 
-				{% else %}
-					<a class="text-white text-2xl" href="{% url 'logout' %}">{% heroicon_outline "logout" %}<span class="text-sm">Logout</span></a>
-				{% endif %}
-			</div>
-		</nav>
-	</header>
-	<div class="h-screen relative">
-	<!--If statement to render messages-->
-	<div class="my-0 mx-auto w-96 px-3">
-		{% if messages %}
-			{% for message in messages %}
-				<div class="text-orange-500"> {{ message }}</div>
-			{% endfor %}
-		{% endif %}
-	</div>
-    {% block content %}
-    {% endblock %}
+<body class="flex justify-between flex-col min-h-screen"> 
+	<div>
+		<header class="sticky top-0 nav">
+			<nav class="border-2 p-3 mb-5 shadow-lg bg-black">
+				<div class="flex justify-between mt-3">
+					<a class="text-white text-2xl" href="{% url 'home' %}">Home</a>
+					{% if not user.is_authenticated %}
+						<a class="text-white text-2xl" href="{% url 'login' %}">{% heroicon_outline "login" %}<span class="text-sm">Log In</span></a> 
+					{% else %}
+						<a class="text-white text-2xl" href="{% url 'logout' %}">{% heroicon_outline "logout" %}<span class="text-sm">Logout</span></a>
+					{% endif %}
+				</div>
+			</nav>
+		</header>
+	
+		<!--If statement to render messages-->
+		<div class="my-0 mx-auto w-96 px-3">
+			{% if messages %}
+				{% for message in messages %}
+					<div class="text-orange-500"> {{ message }}</div>
+				{% endfor %}
+			{% endif %}
+		</div>
+		{% block content %}
+		{% endblock %}
 </div>
-	<footer class="shadow-lg border-2 bg-black">
+	<footer class="shadow-lg border-2 bg-black w-full mt-8">
 		<div class="grid grid-cols-3 text-center h-20 items-center">
 			<a
 			  class="font-bold text-white"
