@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from .models import BlogPost, BlogComment
+from .models import BlogPost, BlogComment, BlogLike
 
 from .forms import PostModelForm, CommentModelForm
 
@@ -135,13 +135,130 @@ def blog_comment_edit_view(request,  **kwargs):
 
     return render(request, template, context)
 
+def blog_detail_view(request, **kwargs):
+    """ A view to render blog post detail """
+   
+    uuid = kwargs.get('post_uuid', None)
+
+    if request.method == 'GET': 
+        # Get a blog post by its uuid or redirect to the home page 
+        try:
+            blog_post = BlogPost.objects.get(post_uuid=uuid)
+        except:        
+            messages.error(request, 'Sorry, this post does not exist.')
+            return redirect(reverse('home'))
+
+        # Get all blog comments and order them by updated date
+        blog_comments = BlogComment.objects.filter(
+            comment_blog=blog_post,
+        ).order_by('-updated')
+
+         # Get a blog post like or returns none 
+        blog_post_like = BlogLike.objects.filter(
+                like_blog=blog_post,
+                like_auther=request.user
+            ).first()
+
+    if request.method == 'POST':
+        
+        user = request.user
+        
+        # Get a blog post by its uuid or redirect to the home page 
+        try:
+            blog_post = BlogPost.objects.get(post_uuid=uuid)
+        except:        
+            messages.error(request, 'Sorry, this post does not exist.')
+
+        # If condition to ensure only logged in user can add comments.
+        if user.is_authenticated:
+            # Instantiate a new instance of blog post form
+            form = CommentModelForm(request.POST or None)
+            if form.is_valid():
+                comment_obj = form.save(commit=False)
+
+                # Attach user & blog post to comment
+                comment_obj.comment_auther = request.user
+                comment_obj.comment_blog = blog_post
+
+                comment_obj.save()
+
+                # Add success message
+                messages.success(request, 'Comment added successfully!')
+
+                
+                return redirect(reverse('blog_detail',  args=[blog_post.post_uuid]))
+
+            else:
+                messages.error(request, 'Failed to add comment. \
+                                        Please make sure, the form is valid.')
+        
+        else:
+            # Add an error message
+            messages.error(request, 'Please login to add comment.')
+            return redirect(reverse('home'))
+    else:
+        # Empty form instantiation
+        form = CommentModelForm()
+    
+     
+    template_name = 'detail.html'
+
+    context = {
+        'blog_post': blog_post,
+        'comment_list': blog_comments,
+        'form': form,
+        'like': blog_post_like
+        }
+
+    return render(request, template_name, context)
+
+@login_required
+def blog_like_view(request,  **kwargs):
+    """ A view to handle like/dislike a blog post """
+    # Get user and post_uuid from request
+    user = request.user
+    uuid = kwargs.get('post_uuid', None)
+
+    # Get a blog post or redirect to the home page with error message
+    try:
+        blog_post = BlogPost.objects.get(
+            post_uuid=uuid
+            )
+    except:        
+        messages.error(request, 'This blog post does not exist.')
+        return redirect(reverse('home'))
+
+    # Get blog post likes
+    blog_post_like = BlogLike.objects.filter(
+        like_auther=request.user,
+        like_blog=blog_post
+    ).first()
+
+    if blog_post_like is None:
+        new_like = BlogLike.objects.create(
+            like_auther=request.user,
+            like_blog=blog_post
+        )
+        new_like.save()
+        blog_post.num_of_likes = blog_post.num_of_likes+1
+        blog_post.save()
+
+        return redirect(reverse('blog_detail', args=[blog_post.post_uuid]))
+
+    else:
+        blog_post_like.delete()
+        blog_post.num_of_likes = blog_post.num_of_likes-1
+        blog_post.save()
+
+        return redirect(reverse('blog_detail', args=[blog_post.post_uuid]))
+    
+
+
 @login_required
 def blog_comment_delete_view(request, **kwargs):
     """ Aview to delete blog post comment from DB """
     user = request.user
     uuid = kwargs.get('comment_uuid', None)
-    print('Comment uuid', uuid)
-    print('user', user)
 
     # Get a blog post by passing user and post_uuid or redirect to the home page
     try:

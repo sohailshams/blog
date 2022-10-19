@@ -17,6 +17,7 @@ class BlogPost(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     role = models.CharField(max_length=20, choices=BLOG_USER_CHOICES, default='owner')
+    num_of_likes = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -32,3 +33,12 @@ class BlogComment(models.Model):
 
     def __str__(self):
         return self.comment_blog.title
+
+
+class BlogLike(models.Model):
+    like_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    like_auther = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    like_blog = models.ForeignKey(BlogPost, related_name='blog_likes', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.like_blog.title
