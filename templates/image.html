@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block extra_title %}post{% endblock %}
+{% block content %}
+<div class="h-20 my-5"></div>
+<div class="flex justify-center">
+   <div class="border-2 border-t-0 p-3 w-10/12 shadow-lg mt-5">
+        <h2 class="text-2xl text-red-800 my-5  h-15">Update Image</h2>
+        <div>
+            <form class="image-upload" method="POST" action="." enctype="multipart/form-data">{% csrf_token %}
+            {{form.as_p}}
+            <button class="text-l text-cyan-800 border-2 px-5 hover:text-red-800 shadow-lg mt-3" type="submit">Update</button>
+            </form>
+        </div>
+    </div>  
+</div>
+
+{% endblock %}

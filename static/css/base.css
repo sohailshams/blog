@@ -97,3 +97,19 @@ label[for="id_new_password2"]
     border-radius: 15%;
     margin-bottom: 10px;
 }
+
+/* Hide current image and file path of upload image form  */
+.image-upload > p  {
+    visibility: hidden;
+}
+
+.image-upload > p > #id_profile_img {
+visibility: visible !important;
+
+}
+
+@media (min-width:520px) {
+    .image-upload > button {
+        margin-left: 65px;
+    }
+}

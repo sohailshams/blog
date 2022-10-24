@@ -135,10 +135,12 @@ def blog_comment_edit_view(request,  **kwargs):
 
     return render(request, template, context)
 
+@login_required
 def blog_detail_view(request, **kwargs):
     """ A view to render blog post detail """
    
     uuid = kwargs.get('post_uuid', None)
+    user = request.user
 
     if request.method == 'GET': 
         # Get a blog post by its uuid or redirect to the home page 
@@ -156,13 +158,10 @@ def blog_detail_view(request, **kwargs):
          # Get a blog post like or returns none 
         blog_post_like = BlogLike.objects.filter(
                 like_blog=blog_post,
-                like_auther=request.user
+                like_auther=user
             ).first()
 
-    if request.method == 'POST':
-        
-        user = request.user
-        
+    if request.method == 'POST':  
         # Get a blog post by its uuid or redirect to the home page 
         try:
             blog_post = BlogPost.objects.get(post_uuid=uuid)

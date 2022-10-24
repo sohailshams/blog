@@ -3,7 +3,12 @@ from .models import BlogPost, BlogComment
 
 class PostModelForm(forms.ModelForm):
     class Meta:
+        """
+        Telling django it is associated with BlogPost model
+        """
         model = BlogPost
+
+        # Render all fields
         fields = [
             'title',
             'description',
@@ -61,16 +66,16 @@ class CommentModelForm(forms.ModelForm):
 
     class Meta:
         """
-        Telling django it is associated with review model
+        Telling django it is associated with BlogComment model
         """
         model = BlogComment
-        """
-        Set exclude attribute and render all fields except user
-        as it will never change
-        """
+    
+        # Render comment_body field
+       
         fields = [
             'comment_body',
         ]
+
     # Override the default init method which allows the form to be customized
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
