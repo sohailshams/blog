@@ -1,11 +1,12 @@
+import os
+from django.conf import settings
+
 from django.shortcuts import  render, redirect, reverse
-from .forms import SignupModelForm
+from .forms import SignupModelForm, ProfileImageModelForm, ProfileUpdateModelForm
 from .models import Profile
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-
-from .forms import ProfileImageModelForm
 
 
 def register_view(request):
@@ -79,11 +80,27 @@ def profile_image_view(request, **kwargs):
     if user_profile.user != request.user:
         messages.error(request, 'Sorry, only profile owner can upate profile image.')
         return redirect(reverse('home'))
+
+    # Get image path
+    image_path = user_profile.profile_img.path
  
     if request.method == 'POST':  
+        updated_image = request.FILES.get('profile_img', '')
+
+        # Check if updated image exist or return error message & redirect to home page
+        if not updated_image:
+            messages.success(request, 'Please add profile image and try again.')            
+            return redirect(reverse('profile', args=[user]))
+        
         # Instantiate a new instance of ProfileImageModelForm
         form = ProfileImageModelForm(request.POST, request.FILES, instance=user_profile)
         if form.is_valid():
+
+            # deleting old uploaded image
+            if os.path.exists(image_path):
+                os.remove(image_path)
+                
+            # The `form.save` will update newest image & path.
             profile_image = form.save()
 
             # Add success message
@@ -100,6 +117,63 @@ def profile_image_view(request, **kwargs):
 
     context = {
         'form': form
+    }
+
+    return render(request, template_name, context)
+ 
+ 
+@login_required
+def profile_update_view(request, **kwargs):
+    """ A view to handle profile update """
+    user = kwargs.get('username', None)
+    uuid = kwargs.get('profile_uuid', None)
+    
+    # Get user profile or return error message & redirect to home page
+    try:
+        user_profile = Profile.objects.get(profile_uuid=uuid)
+    except:
+        messages.error(request, 'Sorry, this profile does not exist.')
+        return redirect(reverse('home'))
+
+    # Check if user is profile owner
+    if user_profile.user != request.user:
+        messages.error(request, 'Sorry, only profile owner can upate profile.')
+        return redirect(reverse('home'))
+
+    # Get image path
+    image_path = user_profile.profile_img.path
+ 
+    if request.method == 'POST':  
+        # Get image from request.FILES
+        updated_image = request.FILES.get('profile_img', '')
+        
+        # Instantiate a new instance of ProfileImageModelForm
+        form = ProfileUpdateModelForm(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid():
+            # Delete old image only if new image is selected
+            if updated_image:
+                # deleting old uploaded image if new image is passed
+                if os.path.exists(image_path):
+                    os.remove(image_path)
+                
+            # The `form.save` will update newest image & path if exist or will save profile info only
+            form.save()
+
+            # Add success message
+            messages.success(request, 'Profile updated successfully!')            
+            return redirect(reverse('profile', args=[user]))
+        else:
+            messages.error(request, 'Failed to update user profile. \
+                                    Please try again!')       
+    else:
+        # Empty form instantiation
+        form = ProfileUpdateModelForm(instance=user_profile)
+
+    template_name = 'profile_update.html'
+
+    context = {
+        'form': form,
+        'user_profile': user_profile
     }
 
     return render(request, template_name, context)

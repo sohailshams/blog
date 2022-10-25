@@ -108,8 +108,38 @@ visibility: visible !important;
 
 }
 
+/* Hide current image and file path of upload image */
+.profile-update > p  {
+    visibility: hidden;
+}
+
+.profile-update > p > #id_profile_img {
+visibility: visible !important;
+}
+
+.profile-update > p > input[name='location'] {
+    visibility: visible !important;
+    margin: 15px 0px 15px 0px;
+}
+
+.profile-update > p > input[name='user_role'] {
+    visibility: visible !important;
+}
+
 @media (min-width:520px) {
     .image-upload > button {
+        margin-left: 65px;
+    }
+
+    .profile-update > p > input[name='location'] {
+        margin-left: 65px;
+    }
+
+    .profile-update > p > input[name='user_role'] {
+        margin-left: 65px;
+    }
+
+    .profile-update > button {
         margin-left: 65px;
     }
 }
