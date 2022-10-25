@@ -7,7 +7,7 @@
    <div class="border-2 border-t-0 p-3 w-10/12 shadow-lg mt-5">
         <h2 class="text-2xl text-red-800 my-5">{{blog_post.title}}</h2>
         <p>{{blog_post.body}}</p>
-        <p>{{blog_post.auther}}</p>
+        <p class="capitalize pt-3 font-medium">- {{blog_post.auther}}</p>
         <hr class="my-3">
        <div class="flex space-x-2">
         {% if blog_post.num_of_likes > 0 %}
@@ -31,7 +31,7 @@
             {% endif %}
             {% for comment in  comment_list %}
             <ul>
-              <li class="py-1 bg-slate-100 font-bold">@{{comment.comment_auther}}</li>
+              <a href="{% url 'profile' comment.comment_auther %}"><li class="py-1 bg-slate-100 font-bold capitalize hover:text-red-800">@{{comment.comment_auther}}</li></a>
                 <li class="py-1 bg-slate-100">
                   {{comment.comment_body}} {% if request.user == comment.comment_auther %}<br><a class="text-sm text-cyan-800" href="{% url 'blog_comment_edit' blog_post.post_uuid comment.comment_uuid %}">+ Edit</a>
                   <a class="text-sm text-cyan-800" href="{% url 'blog_comment_delete' comment.comment_uuid %}">| - Delete</a>
