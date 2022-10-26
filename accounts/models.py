@@ -11,3 +11,11 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+class Follow(models.Model):
+    follow_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    follower = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    user = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return self.follower.username

@@ -3,7 +3,8 @@ from django.conf import settings
 
 from django.shortcuts import  render, redirect, reverse
 from .forms import SignupModelForm, ProfileImageModelForm, ProfileUpdateModelForm
-from .models import Profile
+from .models import Profile, Follow
+from blogs.models import BlogPost
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -39,6 +40,7 @@ def register_view(request):
 def profile_view(request, **kwargs):
     """ A view to handle user profile """
     user = kwargs.get('username', None)
+    follower = request.user
  
     # Get user or return error message & redirect to home page
     try:
@@ -54,10 +56,35 @@ def profile_view(request, **kwargs):
         messages.error(request, 'Sorry, this profile does not exist.')
         return redirect(reverse('home'))
 
+    # Get follow objet
+    user_follower = Follow.objects.filter(
+            follower=follower,
+            user=user
+        ).first()
+
+    if user_follower:
+        button_text = 'Unfollow'
+    else:
+        button_text = 'Follow'
+
+    # Get posts list
+    post_list = BlogPost.objects.filter(auther=blog_user).count()
+
+    # Get followers list
+    followers_list = Follow.objects.filter(user=user).count()
+    
+    # Get following list
+    following_list = Follow.objects.filter(follower=user_profile.user).count()
+
     template_name = 'profile.html'
 
     context = {
         'user_profile': user_profile,
+        'button_text': button_text,
+        'posts': post_list,
+        'following_list': following_list,
+        'followers_list': followers_list
+
     }
 
     return render(request, template_name, context)
@@ -178,3 +205,29 @@ def profile_update_view(request, **kwargs):
 
     return render(request, template_name, context)
     
+
+@login_required
+def follow_unfollow_view(request,  **kwargs):
+    """ A view to handle follow/unfollow of a user """
+    # Get user and follower
+    follower = request.user
+    user = kwargs.get('username', None)
+    
+    # Get follow objet
+    user_follower = Follow.objects.filter(
+            follower=follower,
+            user=user
+        ) 
+
+    # Delete follow object if exist or create new follow object
+    if len(user_follower):
+        user_follower.delete()
+        messages.success(request, f'{user} unfollowed successfully')
+    else:
+        Follow.objects.create(
+            follower=follower,
+            user=user
+        )     
+        messages.success(request, f'You are now following {user}.')
+
+    return redirect(reverse('profile', args=[user]))

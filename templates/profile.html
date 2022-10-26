@@ -10,6 +10,7 @@
         <div class="absolute top-48 left-2">
             <img class="rounded-full h-40" src="{{user_profile.profile_img.url}}" alt="Profile Image">   
         </div>
+ 
         {% if request.user == user_profile.user %}
             <a class="ml-24 mt-4 absolute" href="{% url 'profile-image' user_profile.user user_profile.profile_uuid %}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
@@ -18,12 +19,22 @@
             </a>
      
         <a class="absolute top-28 left-8 border-1 py-2 px-3 bg-black text-white hover:text-black hover:bg-white" href="{% url 'profile-update' user_profile.user user_profile.profile_uuid %}">Edit Profile</a>
+        {% else %}
+            <form action="{% url 'follow_unfollow' user_profile.user %}" method="POST">{% csrf_token %}
+                <input type="hidden" value="{{user_profile.user}}" name="user">
+                <button class="absolute top-28 left-10 border-1 py-2 px-4 bg-black text-white hover:text-black hover:bg-white" type="submit">{{button_text}}</button>
+            </form>
         {% endif %}
         <div class="flex place-content-between flex-col sm:flex-row">
             <div class="mt-16 mb-3 pl-10">
                 <h2 class="text-2xl text-red-800 capitalize font-semibold">{{user_profile.user}}</h2>
                 <p class="py-1">{{user_profile.user_role}}</p>
                 <p>{{user_profile.location}}</p>
+            </div>
+            <div class="mt-10 flex place-content-center flex-col ">
+                <p class="font-semibold">{% if posts > 0 %}{{posts}}{% endif %} Post{% if posts > 1 %}s{% endif %}</p>
+                <p class="font-semibold">{% if followers_list > 0 %}{{followers_list}}{% endif %} Follower{% if followers_list > 1 %}s{% endif %}</p>
+                <p class="font-semibold">{% if following_list > 0 %}{{following_list}}{% endif %} Following</p>
             </div>
             <div class="mt-2 mb-3 pl-10 sm:pr-10 sm:mt-16">
                 <p class="text-red-800  font-semibold">Contact Info</p>
