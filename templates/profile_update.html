@@ -4,7 +4,10 @@
 <div class="h-20 my-5"></div>
 <div class="flex justify-center">
    <div class="border-2 border-t-0 p-3 w-10/12 shadow-lg mt-5">
+    <div class="flex justify-between">
         <h2 class="text-2xl text-red-800 my-5  h-15">Update Profile</h2>
+        <a class="text-cyan-800 text-xl" href="{% url 'password_change' %}">Change Password</a>
+    </div>
         <div>
             <form class="profile-update" method="POST" action="{% url 'profile-update' user_profile.user user_profile.profile_uuid %}" enctype="multipart/form-data">{% csrf_token %}
             {{form.as_p}}

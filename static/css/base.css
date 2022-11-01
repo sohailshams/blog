@@ -87,8 +87,8 @@ label[for="id_new_password2"]
     top: 50%;
     transform: translate(-50%, -50%);
 }
-/* Comments from styles  */
 
+/* Comments from styles  */
 #id_comment_body {
     overflow: auto;
     max-height: 50px !important;
@@ -142,4 +142,15 @@ visibility: visible !important;
     .profile-update > button {
         margin-left: 65px;
     }
+}
+
+/* Message from styles  */
+#id_msg_content {
+    overflow: auto;
+    max-height: 50px !important;
+    padding: 12px 0px 0px 5px;
+    resize: none; /*remove the resize handle on the bottom right*/
+    border-radius: 15%;
+    margin-bottom: 10px;
+    width: 384px;
 }

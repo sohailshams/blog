@@ -1,4 +1,4 @@
-from django.urls import path 
+from django.urls import path, include
 from .views import register_view, profile_view, profile_image_view, profile_update_view, follow_unfollow_view
 
 urlpatterns = [
@@ -7,4 +7,5 @@ urlpatterns = [
     path('profile/<str:username>/<uuid:profile_uuid>/', profile_image_view, name='profile-image'),
     path('profile/<str:username>/<uuid:profile_uuid>/edit', profile_update_view, name='profile-update'),
     path('profile/<str:username>/follow_unfollow', follow_unfollow_view, name='follow_unfollow'),
+    path('profile/<str:username>/message/', include('message.urls')),
 ]

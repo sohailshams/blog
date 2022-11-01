@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block extra_title %}post{% endblock %}
+{% block content %}
+{{user_profile}}
+<div class="h-20 my-5"></div>
+<div class="flex justify-center">
+   <div class="border-2 border-t-0 p-3 w-10/12 shadow-2xl mt-5">
+        <h2 class="text-2xl text-red-800 my-5  h-15">Messaging <span class="capitalize">{{receiver_user}}</span></h2>
+            <div class="w-96 border-2 mb-3 rounded-lg py-3 h-96 overflow-auto">
+                {% if messages_list %}
+                    {% for message in messages_list %}
+                        <div class="flex flex-col{% if message.msg_sender == 'msgsender' %} items-start {% else %} items-end {% endif %}">
+                            <ul class="px-3 my-2  w-7/12">
+                                <li class="{% if message.msg_sender == 'msgsender' %} bg-slate-100 text-left ml-3 {% else %} bg-red-50 text-right mr-3{% endif %} pl-2 py-2 px-2 rounded-2xl shadow-lg">{{message.msg_content}}<br><p class="text-xs">{{message_datetime}}</p></li>
+                            </ul>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center">Start conversation with <span class="capitalize">{{receiver_user}}</span></p>
+                {% endif %}
+            </div>
+        <div>
+            <form method="POST" action="{% url 'message_add' receiver_user %}">{% csrf_token %}
+                {{form.as_p}}
+                <button class="text-l text-cyan-800 border-2 px-5 hover:text-red-800 shadow-lg mt-3" type="submit">Send</button>
+            </form>
+        </div>
+    </div>  
+</div>
+
+{% endblock %}

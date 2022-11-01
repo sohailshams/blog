@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django_browser_reload',
     'heroicons',
     'accounts',
+    'message',
     ]
 
 MIDDLEWARE = [
