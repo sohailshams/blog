@@ -141,7 +141,7 @@ STATICFILES_DIRS = [
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://red-toy-production.up.railway.app/'
+    'https://powerful-care-production.up.railway.app/'
 ]
 
 # Default primary key field type
