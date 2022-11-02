@@ -1,0 +1,156 @@
+.nav {
+    z-index: 100;
+    margin-top: 0px !important;
+    padding-top: 0px !important;
+    }
+
+/* Removed the labels and styled placeholders */
+
+.login-form > p > label[for="id_username"]
+{
+    display:none;
+    position: relative;
+}
+
+.login-form > p > label[for="id_password"]
+{
+    display:none;
+}
+
+.login-form > p > input::placeholder {
+    color: #6b7280;
+    font-size: 1.2em;
+  }
+
+  .login-form > p
+  {
+      margin-top: 10px;
+  }
+
+.login-button {
+    margin-top: 10px;
+}
+
+.login {
+    position: absolute;
+    padding: 15px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Removed the labels and styled placeholders - register page */
+
+label[for="id_email"]
+{
+    display:none;
+
+}
+
+label[for="id_password1"]
+{
+    display:none;
+
+}
+
+label[for="id_password2"]
+{
+    display:none;
+
+}
+
+/* Removed the labels and styled placeholders - password change page */
+
+label[for="id_old_password"]
+{
+    display:none;
+
+}
+
+label[for="id_new_password1"]
+{
+    display:none;
+
+}
+
+label[for="id_new_password2"]
+{
+    display:none;
+
+}
+
+.success-width {
+    width: 350 px !important;
+    position: absolute;
+    padding: 15px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Comments from styles  */
+#id_comment_body {
+    overflow: auto;
+    max-height: 50px !important;
+    padding: 12px 0px 0px 5px;
+    resize: none; /*remove the resize handle on the bottom right*/
+    border-radius: 15%;
+    margin-bottom: 10px;
+}
+
+/* Hide current image and file path of upload image form  */
+.image-upload > p  {
+    visibility: hidden;
+}
+
+.image-upload > p > #id_profile_img {
+visibility: visible !important;
+
+}
+
+/* Hide current image and file path of upload image */
+.profile-update > p  {
+    visibility: hidden;
+}
+
+.profile-update > p > #id_profile_img {
+visibility: visible !important;
+}
+
+.profile-update > p > input[name='location'] {
+    visibility: visible !important;
+    margin: 15px 0px 15px 0px;
+}
+
+.profile-update > p > input[name='user_role'] {
+    visibility: visible !important;
+}
+
+@media (min-width:520px) {
+    .image-upload > button {
+        margin-left: 65px;
+    }
+
+    .profile-update > p > input[name='location'] {
+        margin-left: 65px;
+    }
+
+    .profile-update > p > input[name='user_role'] {
+        margin-left: 65px;
+    }
+
+    .profile-update > button {
+        margin-left: 65px;
+    }
+}
+
+/* Message from styles  */
+#id_msg_content {
+    overflow: auto;
+    max-height: 50px !important;
+    padding: 12px 0px 0px 5px;
+    resize: none; /*remove the resize handle on the bottom right*/
+    border-radius: 15%;
+    margin-bottom: 10px;
+    width: 384px;
+}
