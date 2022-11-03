@@ -154,3 +154,8 @@ visibility: visible !important;
     margin-bottom: 10px;
     width: 384px;
 }
+
+.bg-image {
+    background: url('/media/bg-image.jpg');
+
+}

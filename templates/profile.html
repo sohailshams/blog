@@ -2,11 +2,13 @@
 {% load heroicons %}
 {% block extra_title %}post{% endblock %}
 {% block content %}
+
 <div class="h-20 my-5"></div>
 <div class="flex justify-center">
     {% if request.user.is_authenticated %}
    <div class="border-2 border-t-0 w-10/12 shadow-lg mt-5 relative">
-        <img class="h-80 w-full" src="/media/bg-image.jpg" alt="Profile Background Image">
+        <!--<<img class="h-80 w-full" src="{ static '/images/bg-image.jpg'}" alt="Profile Background Image">-->
+        <div class="h-80 w-full bg-image"></div>
         <div class="absolute top-48 left-2">
             <img class="rounded-full h-40" src="{{user_profile.profile_img.url}}" alt="Profile Image">   
         </div>
