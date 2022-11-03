@@ -6,7 +6,7 @@
 <div class="flex justify-center">
     {% if request.user.is_authenticated %}
    <div class="border-2 border-t-0 w-10/12 shadow-lg mt-5 relative">
-        <img class="h-80 w-full" src="{{ MEDIA_URL }}/media/bg-image.jpg" alt="Profile Background Image">
+        <img class="h-80 w-full" src="/media/bg-image.jpg" alt="Profile Background Image">
         <div class="absolute top-48 left-2">
             <img class="rounded-full h-40" src="{{user_profile.profile_img.url}}" alt="Profile Image">   
         </div>
