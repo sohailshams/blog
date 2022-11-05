@@ -1,4 +1,4 @@
-import os
+import os.path 
 from django.conf import settings
 
 from django.shortcuts import  render, redirect, reverse
@@ -109,7 +109,9 @@ def profile_image_view(request, **kwargs):
         return redirect(reverse('home'))
 
     # Get image path
-    image_path = user_profile.profile_img.path
+    image_path = user_profile.profile_img.url
+    image_relative_path = image_path.split('/')[-1]
+    image_relative_path = 'media/profile_images/' + image_relative_path
  
     if request.method == 'POST':  
         updated_image = request.FILES.get('profile_img', '')
@@ -124,11 +126,14 @@ def profile_image_view(request, **kwargs):
         if form.is_valid():
 
             # deleting old uploaded image
-            if os.path.exists(image_path):
-                os.remove(image_path)
-                
-            # The `form.save` will update newest image & path.
-            profile_image = form.save()
+            if os.path.exists(image_relative_path):
+                os.remove(os.path.join(image_relative_path))
+
+                # The `form.save` will update newest image & path.
+                profile_image = form.save()
+            else:
+                # The `form.save` will update newest image & path.
+                profile_image = form.save()
 
             # Add success message
             messages.success(request, 'Profile image added successfully!')            
@@ -168,7 +173,9 @@ def profile_update_view(request, **kwargs):
         return redirect(reverse('home'))
 
     # Get image path
-    image_path = user_profile.profile_img.path
+    image_path = user_profile.profile_img.url
+    image_relative_path = image_path.split('/')[-1]
+    image_relative_path = 'media/profile_images/' + image_relative_path
  
     if request.method == 'POST':  
         # Get image from request.FILES
@@ -179,10 +186,11 @@ def profile_update_view(request, **kwargs):
         if form.is_valid():
             # Delete old image only if new image is selected
             if updated_image:
-                # deleting old uploaded image if new image is passed
-                if os.path.exists(image_path):
-                    os.remove(image_path)
-                
+                if os.path.exists(image_relative_path):
+                    os.remove(os.path.join(image_relative_path))
+                    form.save()
+                else:
+                    form.save()
             # The `form.save` will update newest image & path if exist or will save profile info only
             form.save()
 
