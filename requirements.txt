@@ -24,7 +24,7 @@ jinja2-time==0.2.0
 jmespath==1.0.1
 MarkupSafe==2.1.1
 Pillow==9.2.0
-psycopg2-binary==2.9.5
+psycopg2-binary==2.9.6 --only-binary psycopg2-binary
 python-dateutil==2.8.2
 python-slugify==6.1.2
 PyYAML==6.0
