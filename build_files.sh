@@ -11,4 +11,4 @@ pip3 install heroicons
 pip3 install Cython
 pip3 install PyYAML
 pip3 install -r requirements.txt
-python3 manage.py collectstatic
+python3 manage.py collectstatic collectstatic --noinput
