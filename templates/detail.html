@@ -25,7 +25,7 @@
           <div class="flex justify-center	items-center space-x-2">
             <form class="login-form flex justify-center	items-center" method="POST" action=".">{% csrf_token %}
                 {{form.as_p}} 
-                <button class="text-white text-cyan-800 login-button pl-3 invisible comment-button pb-5" type="submit">{% heroicon_outline "chevron-right" %}</button>
+                <button class="text-cyan-800 login-button pl-3 invisible comment-button pb-5" type="submit">{% heroicon_outline "chevron-right" %}</button>
             </form>
           </div>
             {% endif %}
