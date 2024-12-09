@@ -58,7 +58,7 @@ class PostModelForm(forms.ModelForm):
 
         # Removed the form lables
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'my-5 shadow-lg'
+            field.widget.attrs['class'] = 'my-5 shadow-lg p-3'
             field.label = ""
 
 
