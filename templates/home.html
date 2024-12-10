@@ -2,6 +2,12 @@
 {% block extra_title %}Home{% endblock %}
 {% block content %}
 
+
+<div id="spinner" class="fixed inset-0 bg-gray-100 bg-opacity-75 flex justify-center items-center z-50">
+    <!-- Tailwind CSS Spinner -->
+    <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-opacity-50"></div>
+</div>
+<div id="main-content" class="hidden">
 {% if request.user.is_authenticated %}
 <div class="my-5 p-5">
     <a class="text-cyan-800 text-xl" href="{% url 'blog_add' %}">+ New Blog Post</a>
@@ -29,5 +35,13 @@
     {% endfor %}
     </div>
 </div>
+</div>
 
+<script>
+    // Hide spinner and show content after page loads
+    window.addEventListener("load", function () {
+        document.getElementById("spinner").style.display = "none";
+        document.getElementById("main-content").classList.remove("hidden");
+    });
+</script>
 {% endblock %}
